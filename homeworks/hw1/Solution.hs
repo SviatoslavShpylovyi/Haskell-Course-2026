@@ -37,6 +37,8 @@ isPrime n
 --MatrixMul check for the requirements once again
 matMul :: [[Int]] -> [[Int]] -> [[Int]]
 matMul [] [] = []
+matMul _ [] = []
+matMul [] _ = []
 matMul a b =
     [ [ sum [ a !! i !! k * b !! k !! j | k <- [0 .. p - 1] ]
       | j <- [0 .. n - 1] ]
