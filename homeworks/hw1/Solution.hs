@@ -60,8 +60,8 @@ choose (x:xs) = (x, xs) : [ (y, x:ys) | (y, ys) <- choose xs ]
 --Section 2
 --Hamming Nums
 merge :: Ord a => [a] -> [a] -> [a]
-merge xs [] = xs
-merge [] ys = ys
+merge xs [] = nub xs
+merge [] ys = nub ys
 merge (x:xs) (y:ys) 
     | x<y = x:merge xs (y:ys)
     | y<x = y:merge (x:xs) ys
