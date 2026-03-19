@@ -1,26 +1,27 @@
 {-# LANGUAGE BangPatterns #-}
 module Solution where
 import Data.Function
---isPrime
-isPrime :: Int -> Bool
-isPrime n 
- | n <= 1 = False
- | n == 2 = True
- | even n = False -- not needed but, makes the function run faster
- | otherwise = all (/= 0) [ n `mod` i | i <- [2..s]] --  n is not div by i
-  where 
-    s = n & fromIntegral & sqrt & floor -- funky way of writing 
+import Data.List(nub)
+--isPrime I used it before doing Exercise_3
+-- isPrime :: Int -> Bool
+-- isPrime n 
+--  | n <= 1 = False
+--  | n == 2 = True
+--  | even n = False
+--  | otherwise = all (/= 0) [ n `mod` i | i <- [2..s]]
+--   where 
+--     s = n & fromIntegral & sqrt & floor 
 
 --Goldbach Pairs
-goldbach :: Int->[(Int,Int)]
-goldbach n
+goldbachPairs :: Int->[(Int,Int)]
+goldbachPairs n
     | n < 4 = []
     | odd n = []
     | otherwise = [(p,q) | p<-[2..n], let q = n -p, p<=q, isPrime p, isPrime q]
 --Coprime Pairs
 coprimePairs :: [Int]->[(Int,Int)]
 coprimePairs [] = []
-coprimePairs (x:xs) = [(x,y)|y<-xs, x<y, gcd x y ==1] ++ coprimePairs xs 
+coprimePairs (xs) = [(x,y) | x<-nub xs, y<-nub xs, x<y, gcd x y ==1] 
 -- Sieve of Eratosthene
 sieve :: [Int] ->[Int]
 sieve [] = []
@@ -29,8 +30,8 @@ sieve(p:xs) = p : sieve[x | x<-xs, mod x p /=0]
 primesTo :: Int ->[Int]
 primesTo n = sieve [2..n]
 
-isPrime_2 :: Int->Bool
-isPrime_2 n
+isPrime :: Int->Bool
+isPrime n
     | n<2 = False
     | otherwise = elem n (primesTo n)
 --MatrixMul check for the requirements once again
@@ -72,11 +73,11 @@ power 0 _ = 0
 power a b = go a b 1
     where 
      go a 0 acc = acc
-     go a b !acc = go a (b-1) (a*acc) 
+     go a !b !acc = go a (b-1) (a*acc) 
 -- list Maximum
 listMaxBang :: [Int]->Int
 listMaxBang [] = 0
-listMaxBang list = go list 0 
+listMaxBang (x:xs) = go xs x 
     where
      go [] acc = acc
      go (x:xs) !acc = go xs (if x>=acc then x else acc)
@@ -92,8 +93,8 @@ listMaxSeq (x:xs) = go xs x
 primes :: [Int]
 primes  = sieve[2..]
 
-isPrime_3 :: Int -> Bool
-isPrime_3 n
+isPrime_2 :: Int -> Bool
+isPrime_2 n
     | n<2 = False
     | otherwise = elem n (takeWhile (<=n) primes)
 -- Mean
