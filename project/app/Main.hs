@@ -1,16 +1,23 @@
 module Main where
 
-import AST
+import Parser
+
 main :: IO ()
 main = do
-  let program =
-        Program
-          [ Node "input" Source [("value", NumVal 10)]
-          , Node "double" Transform []
-          , Node "output" Sink []
-          ]
-          [ Edge "input" "double"
-          , Edge "double" "output"
+  let input =
+        unlines
+          [ "// Simple dataflow pipeline"
+          , "source input {"
+          , "  value: 10"
+          , "}"
+          , ""
+          , "transform double from input"
+          , ""
+          , "sink output from double"
           ]
 
-  print program
+  case parseProgram input of
+    Nothing -> putStrLn "Parse error"
+    Just program -> do
+      putStrLn "Parsing successful!"
+      print program
