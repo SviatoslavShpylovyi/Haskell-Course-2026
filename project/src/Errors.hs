@@ -14,3 +14,8 @@ data RuntimeError
   | InvalidInputType String
   | MissingParameter String
   deriving (Show, Eq)
+
+data ExecutionError
+  = ValidationFailed ValidationError
+  | RuntimeFailed RuntimeError
+  deriving (Show, Eq)

@@ -1,7 +1,7 @@
 module Main where
 
+import Executor
 import Parser
-import Validator
 
 main :: IO ()
 main = do
@@ -13,7 +13,9 @@ main = do
           , ""
           , "transform double from input"
           , ""
-          , "sink output from double"
+          , "transform increment from double"
+          , ""
+          , "sink output from increment"
           ]
 
   case parseProgram input of
@@ -21,12 +23,14 @@ main = do
       putStrLn "Parse error"
 
     Just program ->
-      case validateProgram program of
-        Left validationError -> do
-          putStrLn "Validation error:"
-          print validationError
+      case executeProgram program of
+        Left executionError -> do
+          putStrLn "Execution error:"
+          print executionError
 
-        Right validProgram -> do
+        Right env -> do
           putStrLn "Parsing successful!"
           putStrLn "Validation successful!"
-          print validProgram
+          putStrLn "Execution successful!"
+          putStrLn "Final environment:"
+          print env
