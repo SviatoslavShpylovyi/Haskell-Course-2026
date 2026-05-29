@@ -53,4 +53,5 @@ test-suite dataflow-project-test
     main-is:          Main.hs
     build-depends:
         base ^>=4.19.1.0,
-        dataflow-project
+        dataflow-project,
+        QuickCheck
