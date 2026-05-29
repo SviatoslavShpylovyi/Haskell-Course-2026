@@ -22,11 +22,14 @@ library
         AST
         Errors
         Parser
+        Graph
+        Validator
 
     build-depends:
         base ^>=4.19.1.0,
         mtl,
-        transformers
+        transformers,
+        containers
 
     hs-source-dirs:   src
     default-language: GHC2021
@@ -53,5 +56,4 @@ test-suite dataflow-project-test
     main-is:          Main.hs
     build-depends:
         base ^>=4.19.1.0,
-        dataflow-project,
-        QuickCheck
+        dataflow-project

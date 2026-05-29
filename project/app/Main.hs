@@ -1,13 +1,13 @@
 module Main where
 
 import Parser
+import Validator
 
 main :: IO ()
 main = do
   let input =
         unlines
-          [ "// Simple dataflow pipeline"
-          , "source input {"
+          [ "source input {"
           , "  value: 10"
           , "}"
           , ""
@@ -17,7 +17,16 @@ main = do
           ]
 
   case parseProgram input of
-    Nothing -> putStrLn "Parse error"
-    Just program -> do
-      putStrLn "Parsing successful!"
-      print program
+    Nothing ->
+      putStrLn "Parse error"
+
+    Just program ->
+      case validateProgram program of
+        Left validationError -> do
+          putStrLn "Validation error:"
+          print validationError
+
+        Right validProgram -> do
+          putStrLn "Parsing successful!"
+          putStrLn "Validation successful!"
+          print validProgram
