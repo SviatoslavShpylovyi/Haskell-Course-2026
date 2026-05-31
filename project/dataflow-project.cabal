@@ -51,11 +51,17 @@ executable dataflow-project
 test-suite dataflow-project-test
     import:           warnings
     default-language: GHC2021
-    -- other-modules:
+    -- 
     -- other-extensions:
     type:             exitcode-stdio-1.0
     hs-source-dirs:   test
     main-is:          Main.hs
+    other-modules:
+        ParserTests,
+        ValidatorTests,
+        ExecutorTests
     build-depends:
         base ^>=4.19.1.0,
-        dataflow-project
+        dataflow-project,
+        QuickCheck,
+        containers
