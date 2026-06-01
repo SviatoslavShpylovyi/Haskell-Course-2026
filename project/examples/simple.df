@@ -1,0 +1,7 @@
+source input {
+  value: 10
+}
+
+transform double from input
+transform increment from double
+sink output from increment

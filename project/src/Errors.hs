@@ -1,5 +1,25 @@
 module Errors where
 
+data ParseError = ParseError
+  { errorLine     :: Int
+  , errorColumn   :: Int
+  , errorExpected :: String
+  , errorFound    :: String
+  }
+  deriving (Show, Eq)
+
+prettyParseError :: ParseError -> String
+prettyParseError err =
+  "Syntax error at line "
+    ++ show (errorLine err)
+    ++ ", column "
+    ++ show (errorColumn err)
+    ++ ". Expected "
+    ++ errorExpected err
+    ++ ", but found "
+    ++ errorFound err
+    ++ "."
+    
 data ValidationError
   = DuplicateNodeId String
   | DanglingReference String

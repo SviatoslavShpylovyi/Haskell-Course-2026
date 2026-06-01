@@ -10,12 +10,38 @@ import Errors
 import Data.Char (toUpper)
 
 runSource :: Node ->Either RuntimeError Value
-runSource node = 
-    case lookup "value" (nodeParams node) of 
+runSource node =
+  case nodeId node of
+    "camera" ->
+      runCameraSource node
+
+    _ ->
+      case lookup "value" (nodeParams node) of
         Just value ->
-            Right value
+          Right value
+
         Nothing ->
-            Left (MissingParameter (nodeId node ++ ".value"))
+          Left (MissingParameter (nodeId node ++ ".value"))
+
+
+runCameraSource :: Node -> Either RuntimeError Value
+runCameraSource node = do
+  width <- requireNumberParam node "width"
+  height <- requireNumberParam node "height"
+  format <- requireStringParam node "format"
+
+  Right
+    ( StrVal
+        ( "Image(width="
+            ++ show width
+            ++ ", height="
+            ++ show height
+            ++ ", format="
+            ++ format
+            ++ ")"
+        )
+    )
+
 
 runTransform :: Node -> [Value] -> Either RuntimeError Value
 runTransform node inputs = 
@@ -42,6 +68,16 @@ runTransform node inputs =
 
     "sum" ->
       sumValues inputs
+    
+    "resize" ->
+      do
+        input <- requireSingleInput "resize" inputs
+        resizeValue node input
+
+    "grayscale" ->
+      do
+        input <- requireSingleInput "grayscale" inputs
+        grayscaleValue input
 
     unknownName ->
       Left (UnknownPrimitive unknownName)
@@ -136,3 +172,66 @@ sumNumberList (value : rest) =
 
     _ ->
       Left (InvalidInputType "sum expects numbers")
+
+resizeValue :: Node -> Value -> Either RuntimeError Value
+resizeValue node value =
+  case value of
+    StrVal imageDescription -> do
+      width <- requireNumberParam node "width"
+      height <- requireNumberParam node "height"
+
+      Right
+        ( StrVal
+            ( imageDescription
+                ++ " -> Resized(width="
+                ++ show width
+                ++ ", height="
+                ++ show height
+                ++ ")"
+            )
+        )
+
+    _ ->
+      Left (InvalidInputType "resize expects an image value")
+
+
+grayscaleValue :: Value -> Either RuntimeError Value
+grayscaleValue value =
+  case value of
+    StrVal imageDescription ->
+      Right (StrVal (imageDescription ++ " -> Grayscale"))
+
+    _ ->
+      Left (InvalidInputType "grayscale expects an image value")
+
+
+requireNumberParam :: Node -> String -> Either RuntimeError Double
+requireNumberParam node paramName =
+  case lookup paramName (nodeParams node) of
+    Just (NumVal number) ->
+      Right number
+
+    Just _ ->
+      Left
+        ( InvalidInputType
+            (nodeId node ++ "." ++ paramName ++ " must be a number")
+        )
+
+    Nothing ->
+      Left (MissingParameter (nodeId node ++ "." ++ paramName))
+
+
+requireStringParam :: Node -> String -> Either RuntimeError String
+requireStringParam node paramName =
+  case lookup paramName (nodeParams node) of
+    Just (StrVal text) ->
+      Right text
+
+    Just _ ->
+      Left
+        ( InvalidInputType
+            (nodeId node ++ "." ++ paramName ++ " must be a string")
+        )
+
+    Nothing ->
+      Left (MissingParameter (nodeId node ++ "." ++ paramName))
