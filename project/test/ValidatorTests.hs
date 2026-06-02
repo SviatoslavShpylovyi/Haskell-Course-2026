@@ -135,6 +135,61 @@ prop_validateNoCyclesAcceptsAcyclicGraph =
         , Edge "b" "c"
         ]
 
+prop_validateGeneratedLinearGraph :: Positive Int -> Property
+prop_validateGeneratedLinearGraph (Positive rawSize) =
+  validateProgram program === Right program
+  where
+    size =
+      rawSize `mod` 20 + 2
+
+    nodeName i =
+      "n" ++ show i
+
+    nodes =
+      [ Node (nodeName 0) Source [("value", NumVal 1)]
+      ]
+      ++
+      [ Node (nodeName i) Transform []
+      | i <- [1 .. size - 2]
+      ]
+      ++
+      [ Node (nodeName (size - 1)) Sink []
+      ]
+
+    edges =
+      [ Edge (nodeName i) (nodeName (i + 1))
+      | i <- [0 .. size - 2]
+      ]
+
+    program =
+      Program nodes edges
+
+
+prop_rejectGeneratedCycle :: Positive Int -> Property
+prop_rejectGeneratedCycle (Positive rawSize) =
+  validateProgram program === Left CycleDetected
+  where
+    size =
+      rawSize `mod` 20 + 2
+
+    nodeName i =
+      "n" ++ show i
+
+    nodes =
+      [ Node (nodeName i) Transform []
+      | i <- [0 .. size - 1]
+      ]
+
+    chainEdges =
+      [ Edge (nodeName i) (nodeName (i + 1))
+      | i <- [0 .. size - 2]
+      ]
+
+    cycleEdge =
+      Edge (nodeName (size - 1)) (nodeName 0)
+
+    program =
+      Program nodes (chainEdges ++ [cycleEdge])
 
 runValidatorTests :: IO ()
 runValidatorTests = do
@@ -153,3 +208,6 @@ runValidatorTests = do
   quickCheck prop_validateUniqueNodeIdsAcceptsUniqueIds
   quickCheck prop_validateEdgesAcceptsExistingReferences
   quickCheck prop_validateNoCyclesAcceptsAcyclicGraph
+  putStrLn "Generated Graphs"
+  quickCheck prop_validateGeneratedLinearGraph
+  quickCheck prop_rejectGeneratedCycle

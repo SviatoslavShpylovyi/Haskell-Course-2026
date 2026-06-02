@@ -1,3 +1,42 @@
 Test suite dataflow-project-test: RUNNING...
+Parser tests
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
+Generated parser tests
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
+Validator tests
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
+Individual validator function tests
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
+Generated Graphs
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
+Executor tests
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
+Executor error tests
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
++++ OK, passed 100 tests.
 Test suite dataflow-project-test: PASS
 Test suite logged to: C:\Project\FP HOMEWORKD\Haskell-Course-2026\project\dist-newstyle\build\x86_64-windows\ghc-9.8.2\dataflow-project-0.1.0.0\t\dataflow-project-test\test\dataflow-project-0.1.0.0-dataflow-project-test.log
